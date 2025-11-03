@@ -1,0 +1,429 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.accessible-care-container {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #000000 0%, #01263e 50%, #00182d 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  perspective: 1500px;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.wheel-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1500px;
+}
+
+.perspective-wrapper {
+  perspective: 1500px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========== CIRCULAR WHEEL - 3D CAROUSEL ========== */
+.circular-wheel {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.circular-wheel.animating {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ========== WHEEL ITEM 3D ========== */
+.wheel-item-3d {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========== CARE CIRCLE - GLOSSY 3D SPHERE ========== */
+.care-circle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  border: 4px solid;
+  background: radial-gradient(
+    circle at 35% 35%,
+    rgba(255, 255, 255, 0.9),
+    rgba(200, 220, 255, 0.7) 40%,
+    rgba(100, 150, 220, 0.5) 70%
+  );
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.8),
+    0 30px 80px rgba(0, 0, 0, 0.25),
+    inset -30px -30px 60px rgba(0, 0, 0, 0.1),
+    inset 30px 30px 60px rgba(255, 255, 255, 0.3),
+    inset -20px -20px 40px rgba(100, 150, 255, 0.05);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+  filter: drop-shadow(-8px 8px 24px rgba(0, 0, 0, 0.15));
+  opacity: 0.6;
+  position: relative;
+}
+
+.care-circle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0.3) 25%,
+    transparent 60%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.care-circle.active {
+  opacity: 1;
+  transform: scale(1.1);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.95),
+    0 40px 100px rgba(0, 0, 0, 0.3),
+    inset -40px -40px 80px rgba(0, 0, 0, 0.15),
+    inset 40px 40px 80px rgba(255, 255, 255, 0.4),
+    inset -30px -30px 60px rgba(100, 150, 255, 0.15),
+    0 60px 120px rgba(0, 50, 150, 0.25);
+}
+
+.circle-gif {
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.circle-gif img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.2)) brightness(1.05);
+}
+
+.circle-gif.main-gif img {
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.25)) brightness(1.1);
+  animation: main-image-pulse 0.5s ease-out;
+}
+
+@keyframes main-image-pulse {
+  0% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.circle-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0066cc;
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.7);
+  position: relative;
+  z-index: 1;
+}
+
+.buzzer-feedback-center {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 3px solid;
+  animation: pulse-animation 0.8s ease-out;
+}
+
+@keyframes pulse-animation {
+  0% {
+    width: 300px;
+    height: 300px;
+    opacity: 1;
+  }
+  100% {
+    width: 480px;
+    height: 480px;
+    opacity: 0;
+  }
+}
+
+.click-ripple {
+  position: fixed;
+  pointer-events: none;
+  animation: ripple-expand 0.6s ease-out;
+  z-index: 50;
+}
+
+@keyframes ripple-expand {
+  0% {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(65, 105, 225, 0.6);
+    box-shadow: 0 0 0 0 rgba(65, 105, 225, 0.4);
+  }
+  100% {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(65, 105, 225, 0);
+    box-shadow: 0 0 0 30px rgba(65, 105, 225, 0);
+  }
+}
+
+
+
+
+.current-label-display span {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0066cc;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
+}
+
+
+.instructions-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fade-in 0.4s ease-out;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.instructions-box {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(240, 248, 255, 0.9)
+  );
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  animation: slide-up 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.instructions-box h2 {
+  color: #0066cc;
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.instructions-box p {
+  color: #4a7ba7;
+  font-size: 16px;
+  margin: 12px 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 1200px) {
+  .circular-wheel {
+    width: 500px;
+    height: 500px;
+  }
+
+  .care-circle {
+    width: 240px;
+    height: 240px;
+    border: 3px solid;
+  }
+
+  .circle-gif {
+    width: 95px;
+    height: 95px;
+    margin-bottom: 10px;
+  }
+
+  .circle-label {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .circular-wheel {
+    width: 380px;
+    height: 380px;
+  }
+
+  .care-circle {
+    width: 200px;
+    height: 200px;
+    border: 3px solid;
+  }
+
+  .care-circle.active {
+    transform: scale(1.08);
+  }
+
+  .circle-gif {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 8px;
+  }
+
+  .circle-label {
+    font-size: 13px;
+  }
+
+  .progress-indicator {
+    bottom: 35px;
+    gap: 8px;
+    padding: 12px 18px;
+  }
+
+  .current-label-display {
+    bottom: 120px;
+    padding: 10px 24px;
+  }
+
+  .current-label-display span {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .circular-wheel {
+    width: 280px;
+    height: 280px;
+  }
+
+  .care-circle {
+    width: 160px;
+    height: 160px;
+    border: 2px solid;
+  }
+
+  .care-circle.active {
+    transform: scale(1.05);
+  }
+
+  .circle-gif {
+    width: 65px;
+    height: 65px;
+    margin-bottom: 6px;
+  }
+
+  .circle-label {
+    font-size: 11px;
+  }
+
+  .current-label-display {
+    bottom: 95px;
+    padding: 8px 20px;
+  }
+
+  .current-label-display span {
+    font-size: 14px;
+  }
+
+  .instructions-box {
+    padding: 30px;
+    margin: 20px;
+  }
+
+  .instructions-box h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .instructions-box p {
+    font-size: 14px;
+    margin: 10px 0;
+  }
+}
+
+.center-display {
+  display: none;
+  pointer-events: none;
+  opacity: 0;
+}
