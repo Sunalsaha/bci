@@ -20,7 +20,7 @@ const AccessibleDashboard: React.FC = () => {
   const [clickFeedback, setClickFeedback] = useState<{ x: number; y: number } | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [showInstructions, setShowInstructions] = useState<boolean>(true);
-  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [, setMousePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [fullscreenInitiated, setFullscreenInitiated] = useState<boolean>(false);
   const lastClickTime = useRef<number>(0);
  const doubleClickTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
