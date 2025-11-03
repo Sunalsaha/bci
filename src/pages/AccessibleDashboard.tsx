@@ -23,7 +23,8 @@ const AccessibleDashboard: React.FC = () => {
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [fullscreenInitiated, setFullscreenInitiated] = useState<boolean>(false);
   const lastClickTime = useRef<number>(0);
-  const doubleClickTimeout = useRef<NodeJS.Timeout | null>(null);
+ const doubleClickTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
 
 
   // Games URL constant
