@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Navbar from './navbar';
 import './AccessibleDashboard.css';
 
+
 interface CareOption {
   id: number;
   gif: string;
@@ -9,6 +10,7 @@ interface CareOption {
   color: string;
   urgent?: boolean;
 }
+
 
 const AccessibleDashboard: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -19,11 +21,14 @@ const AccessibleDashboard: React.FC = () => {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [showInstructions, setShowInstructions] = useState<boolean>(true);
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [fullscreenInitiated, setFullscreenInitiated] = useState<boolean>(false);
   const lastClickTime = useRef<number>(0);
   const doubleClickTimeout = useRef<NodeJS.Timeout | null>(null);
 
+
   // Games URL constant
   const GAMES_URL = 'https://www.gamearter.com/game/evo-f4/';
+
 
   const careOptions: CareOption[] = [
     { id: 1, gif: '/emer.gif', label: 'Emergency', color: '#ff0000ff', urgent: true },
@@ -40,30 +45,16 @@ const AccessibleDashboard: React.FC = () => {
     { id: 12, gif: '/games.gif', label: 'games', color: '#b2209fff' }
   ];
 
+
   const anglePerItem = 360 / careOptions.length;
 
-  useEffect(() => {
-    const enterFullscreen = async () => {
-      try {
-        const element = document.documentElement;
-        if (element.requestFullscreen) {
-          await element.requestFullscreen();
-        } else if ((element as any).webkitRequestFullscreen) {
-          await (element as any).webkitRequestFullscreen();
-        } else if ((element as any).mozRequestFullScreen) {
-          await (element as any).mozRequestFullScreen();
-        } else if ((element as any).msRequestFullscreen) {
-          await (element as any).msRequestFullscreen();
-        }
-      } catch (error) {
-        console.error('Fullscreen request failed:', error);
-      }
-    };
 
-    enterFullscreen();
+  // FIXED: Fullscreen triggered on first click
+  useEffect(() => {
     const timer = setTimeout(() => setShowInstructions(false), 5000);
     return () => clearTimeout(timer);
   }, []);
+
 
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
@@ -76,6 +67,7 @@ const AccessibleDashboard: React.FC = () => {
     return () => document.removeEventListener('keydown', handleEscKey);
   }, []);
 
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
@@ -84,6 +76,26 @@ const AccessibleDashboard: React.FC = () => {
     document.addEventListener('mousemove', handleMouseMove);
     return () => document.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+
+  const enterFullscreen = async () => {
+    try {
+      const element = document.documentElement;
+      if (element.requestFullscreen) {
+        await element.requestFullscreen();
+      } else if ((element as any).webkitRequestFullscreen) {
+        await (element as any).webkitRequestFullscreen();
+      } else if ((element as any).mozRequestFullScreen) {
+        await (element as any).mozRequestFullScreen();
+      } else if ((element as any).msRequestFullscreen) {
+        await (element as any).msRequestFullscreen();
+      }
+      setFullscreenInitiated(true);
+    } catch (error) {
+      console.error('Fullscreen request failed:', error);
+    }
+  };
+
 
   const exitFullscreen = async () => {
     try {
@@ -96,10 +108,12 @@ const AccessibleDashboard: React.FC = () => {
       } else if ((document as any).msFullscreenElement) {
         await (document as any).msExitFullscreen();
       }
+      setFullscreenInitiated(false);
     } catch (error) {
       console.error('Exit fullscreen failed:', error);
     }
   };
+
 
   const playBuzzerSound = (): void => {
     setShowBuzzerFeedback(true);
@@ -132,6 +146,7 @@ const AccessibleDashboard: React.FC = () => {
     }
   };
 
+
   const rotateWheel = (direction: 'right' | 'left'): void => {
     if (isAnimating) return;
     setIsAnimating(true);
@@ -155,7 +170,15 @@ const AccessibleDashboard: React.FC = () => {
     }, 500);
   };
 
+
+  // FIXED: Fullscreen triggered on first click
   const handlePageClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Enter fullscreen on first click if not already done
+    if (!fullscreenInitiated) {
+      enterFullscreen();
+      return;
+    }
+
     const currentTime = new Date().getTime();
     const timeDiff = currentTime - lastClickTime.current;
 
@@ -177,22 +200,22 @@ const AccessibleDashboard: React.FC = () => {
     lastClickTime.current = currentTime;
   };
 
-  // MODIFIED: Updated handleDoubleClick to check for games option
+
   const handleDoubleClick = (): void => {
     const currentOption = careOptions[currentIndex];
     
     if (currentOption.label.toLowerCase() === 'games') {
-      // Open games URL in a new tab
       window.open(GAMES_URL, '_blank', 'noopener,noreferrer');
     } else {
-      // Play buzzer for other options
       playBuzzerSound();
     }
   };
 
+
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.touches[0].clientX);
   };
+
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStart === null) return;
@@ -211,7 +234,9 @@ const AccessibleDashboard: React.FC = () => {
     setTouchStart(null);
   };
 
+
   const currentOption = careOptions[currentIndex];
+
 
   return (
     <div
@@ -228,6 +253,7 @@ const AccessibleDashboard: React.FC = () => {
         <div className="instructions-overlay">
           <div className="instructions-box">
             <h2>Welcome to CareHub</h2>
+            <p>👆 Click to Enter Fullscreen</p>
             <p>👆 Single Click = Rotate Wheel</p>
             <p>👆👆 Double Click = Call Buzzer</p>
             <p>👈 Swipe = Rotate Wheel</p>
@@ -302,14 +328,12 @@ const AccessibleDashboard: React.FC = () => {
           <div
             key={option.id}
             className={`progress-dot ${idx === currentIndex ? 'active' : ''}`}
-            style={{}}
           />
         ))}
       </div>
-
-     
     </div>
   );
 };
+
 
 export default AccessibleDashboard;

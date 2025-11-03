@@ -4,10 +4,26 @@
   box-sizing: border-box;
 }
 
+.navbar {
+  width: 100%;
+  padding: 20px 40px;
+  background: linear-gradient(135deg, rgba(0, 40, 80, 0.9), rgba(0, 20, 50, 0.95));
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.navbar-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(100, 150, 255, 0.5);
+  letter-spacing: 1px;
+}
+
 .accessible-care-container {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #000000 0%, #01263e 50%, #00182d 100%);
+  background: linear-gradient(135deg, #000000 0%, #270006 50%, #00182d 100%);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -229,17 +245,33 @@
   }
 }
 
-
-
-
-.current-label-display span {
-  font-size: 18px;
-  font-weight: 700;
-  color: #0066cc;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
+.progress-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  padding: 15px 24px;
+  background: rgba(0, 40, 80, 0.3);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  z-index: 10;
 }
 
+.progress-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.progress-dot.active {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  transform: scale(1.2);
+}
 
 .instructions-overlay {
   position: fixed;
@@ -306,6 +338,33 @@
   letter-spacing: 0.5px;
 }
 
+.current-label-display {
+  position: absolute;
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 28px;
+  background: rgba(0, 40, 80, 0.3);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.current-label-display span {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0066cc;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
+}
+
+.center-display {
+  display: none;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* ========== MEDIA QUERIES ========== */
 @media (max-width: 1200px) {
   .circular-wheel {
     width: 500px;
@@ -420,10 +479,10 @@
     font-size: 14px;
     margin: 10px 0;
   }
-}
 
-.center-display {
-  display: none;
-  pointer-events: none;
-  opacity: 0;
+  .progress-indicator {
+    bottom: 25px;
+    gap: 6px;
+    padding: 10px 16px;
+  }
 }

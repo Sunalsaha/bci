@@ -40,7 +40,7 @@
 }
 
 .occasion-badge {
-  background: linear-gradient(135deg, #6495ed, #4169E1);
+  background: linear-gradient(135deg, #4c4cee, #4169E1);
   padding: 4px 10px;
   border-radius: 20px;
   font-weight: 600;
@@ -49,13 +49,13 @@
 }
 
 .date {
-  color: #a0b0ff;
+  color: #ffffff;
   font-weight: 500;
   white-space: nowrap;
 }
 
 .time {
-  color: #8a9aff;
+  color: #ffffff;
   font-weight: 600;
   font-family: 'Courier New', monospace;
   white-space: nowrap;
