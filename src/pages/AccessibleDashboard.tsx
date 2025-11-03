@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Navbar from './navbar';
+import Navbar from './Navbar';
+
 import './AccessibleDashboard.css';
 
 
@@ -33,7 +34,7 @@ const AccessibleDashboard: React.FC = () => {
 
   const careOptions: CareOption[] = [
     { id: 1, gif: '/emer.gif', label: 'Emergency', color: '#ff0000ff', urgent: true },
-    { id: 2, gif: '/doct.gif', label: 'Doctor', color: '#0040ffff' },
+    { id: 2, gif: './doct.gif', label: 'Doctor', color: '#0040ffff' },
     { id: 3, gif: '/oxygen.gif', label: 'Oxygen', color: '#00fff7ff' },
     { id: 4, gif: '/Itching.gif', label: 'Itching', color: '#ff0080ff' },
     { id: 5, gif: '/toilet.gif', label: 'Toilet', color: '#ffff05ff' },

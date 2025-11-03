@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './navbar.css';
+import './Navbar1.css';
 
 interface NavbarProps {
   appTitle?: string;
